@@ -1,1 +1,1 @@
-# jira-issue-retriever
+# jira-issue-extractor
