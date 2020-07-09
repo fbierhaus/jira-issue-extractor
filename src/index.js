@@ -11,18 +11,24 @@ async function execute() {
 
     const issues = jiraService.extract();
 
+    if(!_.isArray(issues)) {
+        console.log(`Issues werent found`);
+        return;
+    }
+
     _.compact(await Promise.all(issues.map(async issue => {
         try {
 
+            const normalizedIssue = issue.toUpperCase();
             // just for validation atm
-            await jiraService.getInfoAboutIssue(issue);
+            await jiraService.getInfoAboutIssue(normalizedIssue);
             return await codefreshApi.createIssue({
-                number: issue,
-                url: `https://${configuration.jira.host}/browse/${issue}`
+                number: normalizedIssue,
+                url: `https://${configuration.jira.host}/browse/${normalizedIssue}`
             });
         } catch (e) {
             if(!e.statusCode && JSON.parse(e).statusCode === 404) {
-                console.error(`Skip issue ${issue}, didnt find in jira system`);
+                console.error(`Skip issue ${normalizedIssue}, didnt find in jira system`);
             } else {
                 console.error(e.message);
             }
