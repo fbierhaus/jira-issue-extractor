@@ -30,7 +30,13 @@ async function execute() {
             if(!e.statusCode && JSON.parse(e).statusCode === 404) {
                 console.error(`Skip issue ${normalizedIssue}, didnt find in jira system`);
             } else {
-                console.error(e.message);
+                try {
+                    const error = JSON.parse(e);
+                    console.error(error.body);
+                } catch(err) {
+                    console.error(e.message);
+                }
+
             }
 
         }
