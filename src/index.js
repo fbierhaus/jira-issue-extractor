@@ -32,11 +32,16 @@ async function execute() {
             } else {
                 try {
                     const error = JSON.parse(e);
+                    if(error.statusCode === 401) {
+                        console.error('Wrong username or password');
+                        process.exit(1);
+                        return;
+                    }
                     console.error(error.body);
                 } catch(err) {
                     console.error(e.message);
                 }
-
+                process.exit(1);
             }
 
         }
