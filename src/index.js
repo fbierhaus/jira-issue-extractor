@@ -28,13 +28,20 @@ async function execute() {
             });
         } catch (e) {
             if(!e.statusCode && JSON.parse(e).statusCode === 404) {
-                throw new Error(`Skip issue ${normalizedIssue}, didnt find in jira system`);
+                console.log(`Skip issue ${normalizedIssue}, didnt find in jira system`, 'color:Red');
             } else {
-                const error = JSON.parse(e);
-                if(error.statusCode === 401) {
-                    throw new Error('Wrong username or password');
+                try {
+                    const error = JSON.parse(e);
+                    if(error.statusCode === 401) {
+                        console.log('Wrong username or password', 'color:Red');
+                        process.exit(1);
+
+                    }
+                    console.log(error.body, 'color:Red');
+                } catch(err) {
+                    console.log(e.message, 'color:Red');
                 }
-                throw new Error(error.body);
+                process.exit(1);
             }
 
         }
