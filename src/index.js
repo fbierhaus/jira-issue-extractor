@@ -17,9 +17,9 @@ async function execute() {
     }
 
     _.compact(await Promise.all(issues.map(async issue => {
+        let normalizedIssue;
         try {
-
-            const normalizedIssue = issue.toUpperCase();
+            normalizedIssue = issue.toUpperCase();
             // just for validation atm
             await jiraService.getInfoAboutIssue(normalizedIssue);
             return await codefreshApi.createIssue({
