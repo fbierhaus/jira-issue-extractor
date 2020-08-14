@@ -41,9 +41,8 @@ async function execute() {
                 } catch(err) {
                     console.error(e.message);
                 }
-                process.exit(1);
             }
-
+            process.exit(1);
         }
     })));
 }
