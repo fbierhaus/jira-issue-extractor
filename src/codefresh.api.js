@@ -5,7 +5,7 @@ class CodefreshAPI {
 
     async createIssue(issue) {
 
-        console.log(`Create issue request ${issue.number}=${issue.url}, image: ${image}`)
+        console.log(`Create issue request ${issue.number}=${issue.url}, image: ${image}`);
 
         return rp({
             method: 'POST',

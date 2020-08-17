@@ -1,5 +1,6 @@
 const Promise = require('bluebird');
 const _ = require('lodash');
+const chalk = require('chalk');
 
 const jiraService = require('./jira.service');
 const codefreshApi = require('./codefresh.api');
@@ -12,7 +13,7 @@ async function execute() {
     const issues = jiraService.extract();
 
     if(!_.isArray(issues)) {
-        console.log(`Issues werent found`);
+        console.log(chalk.yellow(`Issues werent found`));
         return;
     }
 
@@ -22,27 +23,30 @@ async function execute() {
             normalizedIssue = issue.toUpperCase();
             // just for validation atm
             await jiraService.getInfoAboutIssue(normalizedIssue);
-            return await codefreshApi.createIssue({
+
+            await codefreshApi.createIssue({
                 number: normalizedIssue,
                 url: `https://${configuration.jira.host}/browse/${normalizedIssue}`
             });
+
+            console.log(chalk.green(`Codefresh assign issue ${normalizedIssue} to your image ${configuration.image}`));
         } catch (e) {
             if(!e.statusCode && JSON.parse(e).statusCode === 404) {
-                console.log(`Skip issue ${normalizedIssue}, didnt find in jira system`);
+                console.log(chalk.yellow(`Skip issue ${normalizedIssue}, didnt find in jira system`));
             } else {
                 try {
                     const error = JSON.parse(e);
                     if(error.statusCode === 401) {
-                        console.error('Wrong username or password');
-                        process.exit(1);
-
+                        console.log(chalk.red('Wrong username or password'));
+                        return process.exit(1);
                     }
-                    console.error(error.body);
+                    console.log(chalk.red(error.body));
                 } catch(err) {
-                    console.error(e.message);
+                    console.log(chalk.red(e.message));
                 }
+                process.exit(1);
             }
-            process.exit(1);
+
         }
     })));
 }
