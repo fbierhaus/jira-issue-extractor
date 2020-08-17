@@ -32,7 +32,7 @@ async function execute() {
             console.log(chalk.green(`Codefresh assign issue ${normalizedIssue} to your image ${configuration.image}`));
         } catch (e) {
             if(!e.statusCode && JSON.parse(e).statusCode === 404) {
-                console.log(chalk.yellow(`Skip issue ${normalizedIssue}, didnt find in jira system`));
+                console.log(chalk.yellow(`Skip issue ${normalizedIssue}, didnt find in jira system or you dont have permissions for find it`));
             } else {
                 try {
                     const error = JSON.parse(e);
