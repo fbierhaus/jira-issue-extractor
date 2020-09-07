@@ -9,17 +9,20 @@ const configuration = require('./configuration');
 
 // Export link
 function _saveLink(url) {
-    function handleError(error, stdout, stderr) {
+    function handleResult(error, stdout, stderr) {
         if (error) {
             console.warn(`Cannot save Jira link. ${error.message}`);
             return;
         }
         if (stderr) {
             console.warn(`Cannot save Jira link. ${stderr}`);
+            return;
         }
+
+        console.log(`Jira link extracted: ${url}`);
     }
 
-    exec(`/codefresh/volume/cf_export ${process.env.LINK_VAR_NAME}=${url}`, handleError);
+    exec(`/codefresh/volume/cf_export ${process.env.LINK_VAR_NAME}=${url}`, handleResult);
 }
 
 async function execute() {
