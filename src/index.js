@@ -19,7 +19,7 @@ function _saveLink(url) {
             return;
         }
 
-        console.log(`Jira link extracted: ${url}`);
+        console.log(`Jira link: ${url}`);
     }
 
     exec(`/codefresh/volume/cf_export ${process.env.LINK_VAR_NAME}=${url}`, handleResult);
