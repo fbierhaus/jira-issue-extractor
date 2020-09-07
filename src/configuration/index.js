@@ -10,7 +10,5 @@ module.exports = {
             api_token: process.env.JIRA_API_TOKEN
         }
     },
-    image: process.env.IMAGE,
-    variablesFile: '/codefresh/volume/env_vars_to_export',
-    variableNameLink: 'CF_CURRENT_JIRA_LINK',
+    image: process.env.IMAGE
 };

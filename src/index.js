@@ -1,7 +1,7 @@
 const Promise = require('bluebird');
 const _ = require('lodash');
 const chalk = require('chalk');
-const fs = require('fs');
+const { exec } = require("child_process");
 
 const jiraService = require('./jira.service');
 const codefreshApi = require('./codefresh.api');
@@ -9,25 +9,17 @@ const configuration = require('./configuration');
 
 // Export link
 function _saveLink(url) {
-    function handleError(err) {
-        console.warn(`Cannot save Jira link. ${err.message}`);
+    function handleError(error, stdout, stderr) {
+        if (error) {
+            console.warn(`Cannot save Jira link. ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.warn(`Cannot save Jira link. ${stderr}`);
+        }
     }
 
-    const updateValue = (data, url) => {
-        return data
-            .split('\n')
-            .filter(val => val.search(new RegExp(`^${configuration.variableNameLink}=`,'i')) === -1)
-            .concat([`${configuration.variableNameLink}=${url}`])
-            .join('\n');
-    }
-
-    fs.readFile(configuration.variablesFile, 'utf8', (err, data) => {
-        if (err) return handleError(err);
-
-        fs.writeFile(configuration.variablesFile, updateValue(data, url), 'utf8', (err) => {
-            if (err) return handleError(err);
-        });
-    })
+    exec(`/codefresh/volume/cf_export ${process.env.LINK_VAR_NAME}=${url}`, handleError);
 }
 
 async function execute() {
