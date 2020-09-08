@@ -20,13 +20,12 @@ async function _saveLink(url) {
                 return resolve();
             }
 
-            console.log(`Jira link: ${url}`);
-            console.log(stdout);
+            console.log(`Exported Jira link: ${url}`);
             resolve();
         }
 
-        // exec(`ls && printenv`, handleResult);
-        exec(`/codefresh/volume/${process.env.CF_STEP_VARIABLES_PATH}/cf_export ${process.env.LINK_VAR_NAME}=${url}`, handleResult);
+        const { CF_VOLUME_PATH, CF_STEP_VARIABLES_PATH, LINK_VAR_NAME } = process.env;
+        exec(`${CF_VOLUME_PATH}/${CF_STEP_VARIABLES_PATH}/cf_export ${LINK_VAR_NAME}=${url}`, handleResult);
     })
 }
 
