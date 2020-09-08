@@ -21,10 +21,12 @@ async function _saveLink(url) {
             }
 
             console.log(`Jira link: ${url}`);
+            console.log(stdout);
             resolve();
         }
 
-        exec(`sh cf_export ${process.env.LINK_VAR_NAME}=${url}`, handleResult);
+        exec(`ls && printenv`, handleResult);
+        // exec(`sh cf_export ${process.env.LINK_VAR_NAME}=${url}`, handleResult);
     })
 }
 
