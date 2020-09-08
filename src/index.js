@@ -26,7 +26,7 @@ async function _saveLink(url) {
         }
 
         // exec(`ls && printenv`, handleResult);
-        exec(`/usr/local/bin/cf_export ${process.env.LINK_VAR_NAME}=${url}`, handleResult);
+        exec(`/codefresh/volume/${process.env.CF_STEP_VARIABLES_PATH}/cf_export ${process.env.LINK_VAR_NAME}=${url}`, handleResult);
     })
 }
 
