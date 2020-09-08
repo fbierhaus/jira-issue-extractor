@@ -8,21 +8,24 @@ const codefreshApi = require('./codefresh.api');
 const configuration = require('./configuration');
 
 // Export link
-function _saveLink(url) {
-    function handleResult(error, stdout, stderr) {
-        if (error) {
-            console.warn(`Cannot save Jira link. ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.warn(`Cannot save Jira link. ${stderr}`);
-            return;
+async function _saveLink(url) {
+    return new Promise((resolve) => {
+        function handleResult(error, stdout, stderr) {
+            if (error) {
+                console.warn(`Cannot save Jira link. ${error.message}`);
+                return resolve();
+            }
+            if (stderr) {
+                console.warn(`Cannot save Jira link. ${stderr}`);
+                return resolve();
+            }
+
+            console.log(`Jira link: ${url}`);
+            resolve();
         }
 
-        console.log(`Jira link: ${url}`);
-    }
-
-    exec(`/codefresh/volume/cf_export ${process.env.LINK_VAR_NAME}=${url}`, handleResult);
+        exec(`/codefresh/volume/cf_export ${process.env.LINK_VAR_NAME}=${url}`, handleResult);
+    })
 }
 
 async function execute() {
@@ -44,7 +47,7 @@ async function execute() {
             await jiraService.getInfoAboutIssue(normalizedIssue);
 
             const url = `https://${configuration.jira.host}/browse/${normalizedIssue}`;
-            _saveLink(url);
+            await _saveLink(url);
 
             await codefreshApi.createIssue({
                 number: normalizedIssue,
