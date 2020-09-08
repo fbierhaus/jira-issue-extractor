@@ -24,7 +24,7 @@ async function _saveLink(url) {
             resolve();
         }
 
-        exec(`/codefresh/volume/cf_export ${process.env.LINK_VAR_NAME}=${url}`, handleResult);
+        exec(`cf_export ${process.env.LINK_VAR_NAME}=${url}`, handleResult);
     })
 }
 
