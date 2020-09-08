@@ -25,7 +25,8 @@ async function _saveLink(url) {
         }
 
         const { CF_VOLUME_PATH, CF_STEP_VARIABLES_PATH, LINK_VAR_NAME } = process.env;
-        exec(`${CF_VOLUME_PATH}/${CF_STEP_VARIABLES_PATH}/cf_export ${LINK_VAR_NAME}=${url}`, handleResult);
+        // exec(`${process.env.CF_VOLUME_PATH}/cf_export ${LINK_VAR_NAME}=${url}`, handleResult);
+        exec(`echo ${LINK_VAR_NAME}=${url} >> ${process.env.CF_VOLUME_PATH}/env_vars_to_export`)
     })
 }
 
