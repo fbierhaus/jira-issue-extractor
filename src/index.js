@@ -25,8 +25,8 @@ async function _saveLink(url) {
             resolve();
         }
 
-        exec(`ls && printenv`, handleResult);
-        // exec(`sh cf_export ${process.env.LINK_VAR_NAME}=${url}`, handleResult);
+        // exec(`ls && printenv`, handleResult);
+        exec(`/usr/local/bin/cf_export ${process.env.LINK_VAR_NAME}=${url}`, handleResult);
     })
 }
 
