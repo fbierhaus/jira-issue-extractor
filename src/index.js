@@ -1,10 +1,33 @@
 const Promise = require('bluebird');
 const _ = require('lodash');
 const chalk = require('chalk');
+const { exec } = require("child_process");
 
 const jiraService = require('./jira.service');
 const codefreshApi = require('./codefresh.api');
 const configuration = require('./configuration');
+
+// Export link
+async function _saveLink(url) {
+    return new Promise((resolve) => {
+        function handleResult(error, stdout, stderr) {
+            if (error) {
+                console.warn(`Cannot save Jira link. ${error.message}`);
+                return resolve();
+            }
+            if (stderr) {
+                console.warn(`Cannot save Jira link. ${stderr}`);
+                return resolve();
+            }
+
+            console.log(`Exported Jira link: ${url}`);
+            resolve();
+        }
+
+        const { CF_VOLUME_PATH, LINK_VAR_NAME } = process.env;
+        exec(`echo ${LINK_VAR_NAME}=${url} >> ${CF_VOLUME_PATH}/env_vars_to_export`, handleResult);
+    });
+}
 
 async function execute() {
 
@@ -24,9 +47,12 @@ async function execute() {
             // just for validation atm
             await jiraService.getInfoAboutIssue(normalizedIssue);
 
+            const url = `https://${configuration.jira.host}/browse/${normalizedIssue}`;
+            await _saveLink(url);
+
             await codefreshApi.createIssue({
                 number: normalizedIssue,
-                url: `https://${configuration.jira.host}/browse/${normalizedIssue}`
+                url,
             });
 
             console.log(chalk.green(`Codefresh assign issue ${normalizedIssue} to your image ${configuration.image}`));
