@@ -24,12 +24,19 @@ async function execute() {
             // just for validation atm
             await jiraService.getInfoAboutIssue(normalizedIssue);
 
-            await codefreshApi.createIssue({
+            const result = await codefreshApi.createIssue({
                 number: normalizedIssue,
                 url: `https://${configuration.jira.host}/browse/${normalizedIssue}`
             });
 
-            console.log(chalk.green(`Codefresh assign issue ${normalizedIssue} to your image ${configuration.image}`));
+            if (!result) {
+                console.log(chalk.red(`Failed to assign issue ${normalizedIssue} to your image ${configuration.image}`));
+                process.exit(1);
+            } else {
+                console.log(chalk.green(`Codefresh assign issue ${normalizedIssue} to your image ${configuration.image}`));
+            }
+
+
         } catch (e) {
             if(!e.statusCode && JSON.parse(e).statusCode === 404) {
                 console.log(chalk.yellow(`Skip issue ${normalizedIssue}, didnt find in jira system or you dont have permissions for find it`));
