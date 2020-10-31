@@ -1,6 +1,6 @@
 module.exports = {
     apiToken: process.env.CF_API_KEY,
-    host: process.env.CODEFRESH_HOST || 'https://g.codefresh.io',
+    host: process.env.CF_HOST || 'https://g.codefresh.io',
     projectName: process.env.JIRA_PROJECT_PREFIX,
     message: process.env.MESSAGE,
     jira: {
