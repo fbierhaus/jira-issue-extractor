@@ -47,6 +47,9 @@ async function execute() {
             // just for validation atm
             await jiraService.getInfoAboutIssue(normalizedIssue);
 
+            const url = `https://${configuration.jira.host}/browse/${normalizedIssue}`;
+            await _saveLink(url);
+
             const result = await codefreshApi.createIssue({
                 number: normalizedIssue,
                 url: `https://${configuration.jira.host}/browse/${normalizedIssue}`
