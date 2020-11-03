@@ -56,7 +56,7 @@ async function execute() {
             });
 
             if (!result) {
-                console.log(chalk.red(`Failed to assign issue ${normalizedIssue} to your image ${configuration.image}`));
+                console.log(chalk.red(`The image you are trying to enrich ${configuration.image} does not exist`));
                 process.exit(1);
             } else {
                 console.log(chalk.green(`Codefresh assign issue ${normalizedIssue} to your image ${configuration.image}`));
