@@ -14,7 +14,10 @@ class CodefreshAPI {
                 entityId: image,
                 entityType: 'image-issues',
                 key: `${issue.number}`,
-                value: issue.url
+                value: {
+                    url : issue.url,
+                    title : issue.title
+                }
             },
             headers: {
                 'Authorization': `Bearer ${apiToken}`
