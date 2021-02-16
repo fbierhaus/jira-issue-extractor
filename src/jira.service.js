@@ -6,7 +6,7 @@ const JiraClient = require("jira-connector");
 class JiraService {
 
     async init() {
-        if (configuration.jira.context) {
+        if (configuration.jira.context && configuration.jira.context !== "") {
             const jiraContext = await codefreshApi.getJiraContext(configuration.jira.context);
             if (!jiraContext) {
                 throw new Error(`Codefresh jira integration \"configuration.jira.context\" not found`)
