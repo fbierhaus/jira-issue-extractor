@@ -33,6 +33,14 @@ async function execute() {
 
     console.log(`Looking for Issues from message ${configuration.message}`);
 
+    try {
+        await jiraService.init()
+    } catch(e) {
+        console.log(chalk.red(`Cant initialize jira client, reason ${e.message}`));
+        process.exit(1);
+    }
+
+
     const issues = jiraService.extract();
 
     if(!_.isArray(issues)) {

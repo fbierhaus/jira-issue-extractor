@@ -8,7 +8,8 @@ module.exports = {
         basic_auth: {
             email: process.env.JIRA_EMAIL,
             api_token: process.env.JIRA_API_TOKEN
-        }
+        },
+        context: process.env.JIRA_CONTEXT,
     },
     image: process.env.IMAGE
 };
