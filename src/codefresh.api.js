@@ -25,5 +25,16 @@ class CodefreshAPI {
             json: true
         });
     }
+
+    async getJiraContext(name) {
+        return rp({
+            method: 'GET',
+            uri: `${host}/api/contexts/${name}?regex=true&type=atlassian&decrypt=true`,
+            headers: {
+                'Authorization': `Bearer ${apiToken}`
+            },
+            json: true
+        });
+    }
 }
 module.exports = new CodefreshAPI();
