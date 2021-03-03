@@ -45,6 +45,9 @@ async function execute() {
 
     if(!_.isArray(issues)) {
         console.log(chalk.yellow(`Issues werent found`));
+        if (configuration.failOnNotFound === "true") {
+            return process.exit(1);
+        }
         return;
     }
 

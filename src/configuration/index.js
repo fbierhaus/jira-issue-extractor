@@ -11,5 +11,6 @@ module.exports = {
         },
         context: process.env.JIRA_CONTEXT,
     },
-    image: process.env.IMAGE
+    image: process.env.IMAGE,
+    failOnNotFound: process.env.FAIL_ON_NOT_FOUND
 };
