@@ -36,5 +36,16 @@ class CodefreshAPI {
             json: true
         });
     }
+
+    async getJiraIssue(context, issueKey) {
+        return rp({
+            method: 'GET',
+            uri: `${host}/api/atlassian/issues/${issueKey}?jira-context=${context}`,
+            headers: {
+                'Authorization': `Bearer ${apiToken}`
+            },
+            json: true
+        });
+    }
 }
 module.exports = new CodefreshAPI();

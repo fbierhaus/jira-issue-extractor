@@ -58,7 +58,8 @@ async function execute() {
             // just for validation atm
             const issueInfo = await jiraService.getInfoAboutIssue(normalizedIssue);
 
-            const url = `https://${configuration.jira.host}/browse/${normalizedIssue}`;
+            const baseUrl = issueInfo.baseUrl || `https://${configuration.jira.host}`
+            const url = `${baseUrl}/browse/${normalizedIssue}`;
             await _saveLink(url);
 
             const result = await codefreshApi.createIssue({
