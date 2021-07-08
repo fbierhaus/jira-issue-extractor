@@ -1,7 +1,8 @@
 const configuration = require('./configuration');
 const codefreshApi = require('./codefresh.api');
 
-const JiraClient = require("jira-connector");
+const JiraClient = require('jira-connector');
+const CodefreshJiraClient = require('./CodefreshJiraClient');
 
 class JiraService {
 
@@ -11,6 +12,11 @@ class JiraService {
             if (!jiraContext) {
                 throw new Error(`Codefresh jira integration \"configuration.jira.context\" not found`)
             }
+            if (jiraContext.spec.data.auth.type === 'addon') {
+                this.jira = new CodefreshJiraClient(configuration.jira.context);
+                return;
+            }
+
             const url = jiraContext.spec.data.auth.apiURL;
             const { hostname } = new URL(url);
             configuration.jira = {
