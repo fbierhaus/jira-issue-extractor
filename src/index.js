@@ -56,17 +56,21 @@ async function execute() {
         try {
             normalizedIssue = issue.toUpperCase();
             // just for validation atm
-            const issueInfo = await jiraService.getInfoAboutIssue(normalizedIssue);
+            const issueInfo = await jiraService
+                .getInfoAboutIssue(normalizedIssue)
+                .catch(() => throw Error(`Can't find jira ticket with number "${normalizedIssue}"`));
 
-            const baseUrl = issueInfo.baseUrl || `https://${configuration.jira.host}`
+            const baseUrl = issueInfo.baseUrl || `https://${configuration.jira.host}`;
             const url = `${baseUrl}/browse/${normalizedIssue}`;
             await _saveLink(url);
 
-            const result = await codefreshApi.createIssue({
-                number: normalizedIssue,
-                url: url,
-                title: _.get(issueInfo, 'fields.summary')
-            });
+            const result = await codefreshApi
+                .createIssue({
+                    number: normalizedIssue,
+                    url: url,
+                    title: _.get(issueInfo, 'fields.summary')
+                })
+                .catch(err => throw Error(`Can't create issue. ${err}`));
 
             if (!result) {
                 console.log(chalk.red(`The image you are trying to enrich ${configuration.image} does not exist`));
