@@ -58,7 +58,9 @@ async function execute() {
             // just for validation atm
             const issueInfo = await jiraService
                 .getInfoAboutIssue(normalizedIssue)
-                .catch(() => throw Error(`Can't find jira ticket with number "${normalizedIssue}"`));
+                .catch(() => {
+                    throw Error(`Can't find jira ticket with number "${normalizedIssue}"`);
+                });
 
             const baseUrl = issueInfo.baseUrl || `https://${configuration.jira.host}`;
             const url = `${baseUrl}/browse/${normalizedIssue}`;
@@ -70,7 +72,9 @@ async function execute() {
                     url: url,
                     title: _.get(issueInfo, 'fields.summary')
                 })
-                .catch(err => throw Error(`Can't create issue. ${err}`));
+                .catch(err => {
+                    throw Error(`Can't create issue. ${err}`);
+                });
 
             if (!result) {
                 console.log(chalk.red(`The image you are trying to enrich ${configuration.image} does not exist`));
