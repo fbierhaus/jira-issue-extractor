@@ -85,21 +85,21 @@ async function execute() {
 
 
         } catch (e) {
-            if(!e.statusCode && JSON.parse(e).statusCode === 404) {
-                console.log(chalk.yellow(`Skip issue ${normalizedIssue}, didnt find in jira system or you dont have permissions for find it`));
-            } else {
-                try {
+            try {
+                if(!e.statusCode && JSON.parse(e).statusCode === 404) {
+                    console.log(chalk.yellow(`Skip issue ${normalizedIssue}, didnt find in jira system or you dont have permissions for find it`));
+                } else {
                     const error = JSON.parse(e);
-                    if(error.statusCode === 401) {
+                    if (error.statusCode === 401) {
                         console.log(chalk.red('Wrong username or password'));
                         return process.exit(1);
                     }
                     console.log(chalk.red(error.body));
-                } catch(err) {
-                    console.log(chalk.red(e.message));
                 }
-                process.exit(1);
+            } catch(err) {
+                console.log(chalk.red(e.message));
             }
+            process.exit(1);
 
         }
     })));
