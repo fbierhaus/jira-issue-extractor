@@ -58,7 +58,8 @@ async function execute() {
             // just for validation atm
             const issueInfo = await jiraService
                 .getInfoAboutIssue(normalizedIssue)
-                .catch(() => {
+                .catch((er) => {
+                    console.log(chalk.red(er.message));
                     throw Error(`Can't find jira ticket with number "${normalizedIssue}"`);
                 });
 
